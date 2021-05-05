@@ -1,8 +1,9 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import 'firebase/auth'
 import {Alert} from 'react-native';
 
-export async function signUp(email, password, lastName, firstName) {
+export async function signUp(email, password) {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);
     const currentUser = firebase.auth().currentUser;
@@ -11,11 +12,9 @@ export async function signUp(email, password, lastName, firstName) {
     db.collection('users')
       .doc(currentUser.uid)
       .set({
-        email: currentUser.email,
-        lastName: lastName,
-        firstName: firstName,
+        email: currentUser.email
       });
   } catch (err) {
-    Alert.alert('Signup through firebase failed!', err.message);
+    Alert.alert('Firebase signup failed!', err.message);
   }
 }
